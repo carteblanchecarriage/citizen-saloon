@@ -1,28 +1,30 @@
-import { detectFeatures } from "@thirdweb-dev/sdk";
 import {
   contractAddress,
   erc1155TokenId,
   minimumBalance,
-} from "const/yourDetails";
+} from 'const/yourDetails';
+import { BigNumber } from 'ethers';
 
 export default async function checkBalance(sdk, address) {
   const contract = await sdk.getContract(
     contractAddress // replace this with your contract address
   );
 
-  let balance;
+  let balance: BigNumber;
+  balance = await contract.call(
+    'balanceOf', // Name of your function as it is on the smart contract
+    // Arguments to your function, in the same order they are on your smart contract
+    [
+      address, // Argument 1
+      erc1155TokenId, // Argument 2
+    ]
+  );
 
-  const features = detectFeatures(contract.abi);
-
-  if (features?.ERC1155?.enabled) {
-    balance = await contract.erc1155.balanceOf(address, erc1155TokenId);
-  } else if (features?.ERC721?.enabled) {
-    balance = await contract.erc721.balanceOf(address);
-  } else if (features?.ERC20?.enabled) {
-    balance = (await contract.erc20.balanceOf(address)).value;
-    return balance.gte((minimumBalance * 1e18).toString());
-  }
-
+  console.log('number of nfts:', balance.toNumber());
+  console.log(balance.gte(minimumBalance));
   // gte = greater than or equal to
-  return balance.gte(minimumBalance);
+  return { hasNft: balance.gte(minimumBalance), quantity: balance.toNumber() };
+
+  // For testing
+  // return { hasNft: true, quantity: 1 };
 }
