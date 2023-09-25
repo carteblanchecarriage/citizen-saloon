@@ -14,48 +14,53 @@ import { Header } from '../components/Header';
 import styles from '../styles/Home.module.css';
 import checkBalance from '@/util/checkBalance';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Home({ hasNft }) {
   const { isLoggedIn, isLoading } = useUser();
-  const [sorryPartner, setSorryPartner] = useState(false);
   const router = useRouter();
   const address = useAddress();
 
-  useEffect(() => {
+  const checkHasNfts = () => {
     if (!isLoggedIn) {
-      setSorryPartner(false);
+      console.log('not logged in');
       return; // Exit the function early if not logged in
-    }
-
-    if (hasNft?.hasNfts) {
+    } else if (isLoggedIn) {
+      console.log('logged in');
       router.push('/saloon');
     } else {
-      console.log('Looks like you&apos;re not from around here');
-      setSorryPartner(true);
+      console.log("Looks like you're not from around here");
     }
-  }, [hasNft, router, isLoggedIn]);
+  };
 
-  return (
-    <>
-      <div className={styles.container}>
-        <Header />
-        <h2 className={styles.heading}>Howdy there</h2>
-      </div>
-      {sorryPartner ? (
-        <div>
-          Sorry Partner, looks like you&apos;re not from around here. Come on
-          back with the proper papers.
+  useEffect(() => {
+    checkHasNfts();
+  }, [isLoggedIn]);
+
+  if (isLoading) {
+    return <div>looking for whiskey</div>;
+  } else {
+    return (
+      <>
+        <div className={styles.container}>
+          <Header />
+          <h2 className={styles.heading}>Howdy there</h2>
+          <h1 className='text-6xl'>Welcome to the Saloon</h1>
         </div>
-      ) : (
-        <h1 className={styles.h1}>Welcome to the Saloon</h1>
-      )}
-    </>
-  );
+        <Image
+          src='/exterior-1.jpg'
+          width={724}
+          height={483}
+          alt='Saloon Interior'
+          className='mx-auto my-12'
+        />
+      </>
+    );
+  }
 }
 
 export async function getServerSideProps(context) {
   const user = await getUser(context.req);
-  console.log('this is the user object');
   if (!user) {
     return {
       props: {},

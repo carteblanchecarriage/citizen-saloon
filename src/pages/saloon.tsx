@@ -23,6 +23,14 @@ export default function Saloon({ hasNft }) {
   const [newMessage, setNewMessage] = useState('');
   const [dateCreated, setDateCreated] = useState('');
 
+  if (isLoading) {
+    return <div>looking for whiskey</div>;
+  }
+
+  if (!hasNft.hasNft) {
+    router.push('/sorry-partner');
+  }
+
   const fetchMessages = async () => {
     try {
       const { data, error } = await supabase.from('messages').select();
@@ -41,10 +49,10 @@ export default function Saloon({ hasNft }) {
   }, []);
 
   useEffect(() => {
-    if (!hasNft.quantity) {
+    if (!user?.address) {
       router.push('/');
     }
-  }, [isLoggedIn, router, hasNft]);
+  }, [isLoggedIn]);
 
   const prepareNewMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
@@ -59,51 +67,55 @@ export default function Saloon({ hasNft }) {
     setNewMessage('');
   };
 
-  return (
-    <>
-      <Image
-        src='/interior-1.jpg'
-        width={500}
-        height={500}
-        alt='Saloon Interior'
-        className='-z-10 fixed top-0 w-full'
-      />
-      <div className={styles.container}>
-        <Header />
-        <h1>Looks like you have {hasNft?.quantity} pistols</h1>
-        <h1 className={styles.heading}>What can I get ya?</h1>
-      </div>
-      <div className='flex items-center justify-center'>
-        <textarea
-          onChange={(e) => prepareNewMessage(e)}
-          className='text-black w-96 p-2'
-          value={newMessage}
-        ></textarea>
-        <button onClick={sendMessage} className='text-2xl border m-2 p-2'>
-          submit
-        </button>
-      </div>
+  if (hasNft.hasNft) {
+    return (
+      <>
+        <Image
+          src='/interior-1.jpg'
+          width={500}
+          height={500}
+          alt='Saloon Interior'
+          className='-z-10 fixed top-0 w-full'
+        />
+        <div className={styles.container}>
+          <Header />
+          <h1>Looks like you have {hasNft?.quantityCitizen} pistols</h1>
+          <h1>Looks like you have {hasNft?.quantityFounding} horse</h1>
+          <h1>Looks like you have {hasNft?.quantityFirst} gold mine</h1>
+          <h1 className={styles.heading}>What can I get ya?</h1>
+        </div>
+        <div className='flex items-center justify-center'>
+          <textarea
+            onChange={(e) => prepareNewMessage(e)}
+            className='text-black w-96 p-2'
+            value={newMessage}
+          ></textarea>
+          <button onClick={sendMessage} className='text-2xl border m-2 p-2'>
+            submit
+          </button>
+        </div>
 
-      <div className='flex flex-col items-center'>
-        {messages &&
-          messages.map((message) => (
-            <div key={message.id} className='w-1/2'>
-              <div className='bg-black text-gray-200 p-2 m-2 bg-opacity-90'>
-                {message.content}
-                <div className='text-xs text-gray-500'>
-                  {new Date(message.created_at).toLocaleString()}
+        <div className='flex flex-col items-center'>
+          {messages &&
+            messages.map((message) => (
+              <div key={message.id} className='w-1/2'>
+                <div className='bg-black text-gray-200 p-2 m-2 bg-opacity-90'>
+                  {message.content}
+                  <div className='text-xs text-gray-500'>
+                    {new Date(message.created_at).toLocaleString()}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-      </div>
-    </>
-  );
+            ))}
+        </div>
+      </>
+    );
+  }
 }
 
 export async function getServerSideProps(context) {
   const user = await getUser(context.req);
-  console.log('this is the user object');
+  console.log('is this running over and over?');
   if (!user) {
     return {
       props: {},
