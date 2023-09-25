@@ -30,7 +30,7 @@ export default function Home({ hasNft }) {
     if (hasNft?.hasNfts) {
       router.push('/saloon');
     } else {
-      console.log("Looks like you're not from around here");
+      console.log('Looks like you&apos;re not from around here');
       setSorryPartner(true);
     }
   }, [hasNft, router, isLoggedIn]);
@@ -43,8 +43,8 @@ export default function Home({ hasNft }) {
       </div>
       {sorryPartner ? (
         <div>
-          Sorry Partner, looks like you're not from around here. Come on back
-          with the proper papers.
+          Sorry Partner, looks like you&apos;re not from around here. Come on
+          back with the proper papers.
         </div>
       ) : (
         <h1 className={styles.h1}>Welcome to the Saloon</h1>

@@ -44,7 +44,7 @@ export default function Saloon({ hasNft }) {
     if (!hasNft.quantity) {
       router.push('/');
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, router, hasNft]);
 
   const prepareNewMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
