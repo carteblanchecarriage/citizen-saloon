@@ -2,7 +2,7 @@
 export const contractAddress = '0x7EeF591A6CC0403b9652E98E88476fe1bF31dDeb';
 
 // Replace this with your domain name.
-export const domainName = 'localhost:3000';
+export const domainName = 'https://citizen-saloon.vercel.app/';
 
 // Minimum number of tokens required to access
 export const minimumBalance = 1;

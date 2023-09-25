@@ -41,7 +41,7 @@ export default function Saloon({ hasNft }) {
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!hasNft.quantity) {
       router.push('/');
     }
   }, [isLoggedIn, router]);
