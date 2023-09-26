@@ -11,5 +11,3 @@ export const minimumBalance = 1;
 export const erc1155TokenId = 42;
 export const erc1155TokenIdFounding = 69;
 export const erc1155TokenIdFirst = 7;
-
-export const testWallet = '0xd1D371E259be54e998a9232c4Dfd20B2Ca016442';
