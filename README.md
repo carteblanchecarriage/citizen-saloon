@@ -12,4 +12,4 @@ Messages can, and might be, deleted at anytime for whatever reason.
 
 If you feel like adding to the site; fork, pull, branch, twist it, bop it, commit, push you know the drill.
 
-Have an idea and don't know how to build it? Share it on the site and let's chat.
+Have an idea and don't know how to build it? Share it in the saloon and let's chat over a drink.
