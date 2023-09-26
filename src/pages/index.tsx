@@ -21,24 +21,11 @@ export default function Home({ hasNft }) {
   const router = useRouter();
   const address = useAddress();
 
-  const checkHasNfts = () => {
-    if (!isLoggedIn) {
-      console.log('not logged in');
-      return; // Exit the function early if not logged in
-    } else if (isLoggedIn) {
-      console.log('logged in');
-      router.push('/saloon');
-    } else {
-      console.log("Looks like you're not from around here");
-    }
-  };
-
-  useEffect(() => {
-    checkHasNfts();
-  }, [isLoggedIn]);
-
   if (isLoading) {
-    return <div>looking for whiskey</div>;
+    return <div className='text-4xl'>looking for whiskey</div>;
+  } else if (isLoggedIn) {
+    console.log('logged in');
+    router.push('/saloon');
   } else {
     return (
       <>

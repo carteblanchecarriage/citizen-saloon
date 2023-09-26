@@ -13,19 +13,12 @@ import Image from 'next/image';
 
 export default function Saloon({ hasNft }) {
   const { isLoggedIn, isLoading, user } = useUser();
-
   const { contract } = useContract(contractAddress);
-
   const address = useAddress();
   const router = useRouter();
-
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [dateCreated, setDateCreated] = useState('');
-
-  if (isLoading) {
-    return <div>looking for whiskey</div>;
-  }
 
   if (!hasNft.hasNft) {
     router.push('/sorry-partner');
@@ -52,20 +45,26 @@ export default function Saloon({ hasNft }) {
     if (!user?.address) {
       router.push('/');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, router, user]);
 
   const prepareNewMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.target.value);
   };
 
   const sendMessage = async () => {
-    const { data, error } = await supabase
-      .from('messages')
-      .insert([{ content: newMessage }])
-      .select();
-    fetchMessages();
-    setNewMessage('');
+    if (newMessage.length > 0) {
+      const { data, error } = await supabase
+        .from('messages')
+        .insert([{ content: newMessage }])
+        .select();
+      fetchMessages();
+      setNewMessage('');
+    }
   };
+
+  if (isLoading) {
+    return <div>looking for whiskey</div>;
+  }
 
   if (hasNft.hasNft) {
     return (
@@ -79,10 +78,21 @@ export default function Saloon({ hasNft }) {
         />
         <div className={styles.container}>
           <Header />
-          <h1>Looks like you have {hasNft?.quantityCitizen} pistols</h1>
-          <h1>Looks like you have {hasNft?.quantityFounding} horse</h1>
-          <h1>Looks like you have {hasNft?.quantityFirst} gold mine</h1>
-          <h1 className={styles.heading}>What can I get ya?</h1>
+          <div className='bg-black bg-opacity-90 p-2'>
+            {' '}
+            <h1 className='text-2xl'>
+              Looks like you have {hasNft?.quantityCitizen} pistols
+            </h1>
+            <h1 className='text-2xl'>
+              Looks like you have {hasNft?.quantityFounding} horse
+            </h1>
+            <h1 className='text-2xl'>
+              Looks like you have {hasNft?.quantityFirst} gold mine
+            </h1>
+          </div>
+          <h1 className={styles.heading}>
+            Nice to see you, what can I get ya?
+          </h1>
         </div>
         <div className='flex items-center justify-center'>
           <textarea
@@ -90,7 +100,10 @@ export default function Saloon({ hasNft }) {
             className='text-black w-96 p-2'
             value={newMessage}
           ></textarea>
-          <button onClick={sendMessage} className='text-2xl border m-2 p-2'>
+          <button
+            onClick={sendMessage}
+            className='text-2xl border m-2 p-2 hover:bg-gray-700'
+          >
             submit
           </button>
         </div>

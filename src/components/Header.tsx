@@ -6,9 +6,7 @@ import Link from 'next/link';
 export const Header = () => {
   return (
     <nav className={styles.header}>
-      <Link href='/' className='text-4xl'>
-        🐎
-      </Link>
+      <h1 className='text-4xl'>🐎</h1>
       <ConnectWallet theme='dark' />
     </nav>
   );
