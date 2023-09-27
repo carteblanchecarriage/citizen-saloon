@@ -21,9 +21,7 @@ export default function Home({ hasNft }) {
   const router = useRouter();
   const address = useAddress();
 
-  if (isLoading) {
-    return <div className='text-4xl'>looking for whiskey</div>;
-  } else if (isLoggedIn) {
+  if (isLoggedIn) {
     console.log('logged in');
     router.push('/saloon');
   } else {
